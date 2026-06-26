@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Все кадровые события</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f3f6f9;
+            color: #17283a;
+            padding: 28px 16px;
+        }
+        .page { max-width: 1180px; margin: 0 auto; }
+        .top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        h1 { font-size: 28px; }
+        .btn {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: #174b76;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid #dde6ef;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .card .label { color: #617589; font-size: 14px; margin-bottom: 6px; }
+        .card .num { font-size: 28px; font-weight: 800; color: #174b76; }
+        .table-wrap {
+            background: #fff;
+            border: 1px solid #dde6ef;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        table { width: 100%; border-collapse: collapse; min-width: 760px; }
+        th, td {
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid #edf2f7;
+        }
+        th { background: #edf3f8; color: #314b64; }
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: #e8f1fa;
+            color: #174b76;
+            font-weight: 700;
+            font-size: 13px;
+        }
+        .muted { color: #6c7f92; }
+        .empty { text-align: center; padding: 28px; color: #6c7f92; }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="top">
+        <div>
+            <h1>Все увольнения и отпуска</h1>
+            <p class="muted">Сводка по сохранённым записям из БД</p>
+        </div>
+        <div>
+            <a class="btn" href="{% url 'leave_page' %}">Добавить запись</a>
+            <a class="btn" href="{% url 'user_index' %}">На главную</a>
+        </div>
+    </div>
+
+    <div class="summary">
+        <div class="card">
+            <div class="label">Всего записей</div>
+            <div class="num">{{ total_departures }}</div>
+        </div>
+        <div class="card">
+            <div class="label">Нужно принять</div>
+            <div class="num">{{ total_hires }}</div>
+        </div>
+        <div class="card">
+            <div class="label">Активных сотрудников</div>
+            <div class="num">{{ active_employees }}</div>
+        </div>
+        {% for type_code, need in hiring_needs.items %}
+            <div class="card">
+                <div class="label">{{ need.name }}</div>
+                <div class="num">{{ need.count }}</div>
+                <div class="muted">принять: {{ need.hires_needed }}</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="table-wrap">
+        {% if departures %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Сотрудник</th>
+                        <th>Должность</th>
+                        <th>Категория</th>
+                        <th>Дата</th>
+                        <th>Комментарий</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for departure in departures %}
+                        <tr>
+                            <td>
+                                {% if departure.employee %}
+                                    <strong>{{ departure.employee.first_name }} {{ departure.employee.last_name }}</strong>
+                                {% else %}
+                                    <span class="muted">Не указан</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if departure.employee and departure.employee.position %}
+                                    {{ departure.employee.position }}
+                                {% else %}
+                                    <span class="muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td><span class="badge">{{ departure.get_type_display }}</span></td>
+                            <td>{{ departure.date|date:"d.m.Y" }}</td>
+                            <td>{{ departure.note|default:"-" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty">Пока нет сохранённых записей.</div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

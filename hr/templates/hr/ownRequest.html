@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расчёт найма по увольнениям</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(145deg, #f4f8fc 0%, #e7eef5 100%);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        /* Шапка */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            color: #0b1f30;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .header h1 i { color: #1e5a8a; }
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #1a334a;
+            color: white;
+            padding: 0.6rem 1.6rem;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn-home:hover { background: #0f263b; }
+        
+        /* Карточки сводки */
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,20,40,0.06);
+            border-left: 4px solid #1e5a8a;
+        }
+        .card h3 { color: #4a657e; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .card .number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0b1f30;
+        }
+        .card.highlight { border-left-color: #d9534f; background: #fef5f5; }
+        .card.highlight .number { color: #d9534f; }
+        
+        /* Таблица */
+        .table-wrapper {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,20,40,0.06);
+            overflow: hidden;
+        }
+        .table-header {
+            background: #f5f8fa;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e0e8f0;
+        }
+        .table-header h2 {
+            font-size: 1.3rem;
+            color: #0b1f30;
+            margin: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead {
+            background: #f0f4f8;
+        }
+        th {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: #4a657e;
+            border-bottom: 2px solid #e0e8f0;
+            font-size: 0.9rem;
+        }
+        td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #f0f4f8;
+            color: #2f4b66;
+        }
+        tbody tr:hover { background: #fafbfc; }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .resignation { background: #fce4ec; color: #c2185b; }
+        .maternity { background: #e1f5fe; color: #0277bd; }
+        .retirement { background: #f3e5f5; color: #6a1b9a; }
+        .dismissal_violation { background: #ffebee; color: #d32f2f; }
+        .dismissal_cert { background: #fff3e0; color: #e65100; }
+        .other { background: #eceff1; color: #455a64; }
+
+        .filter-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,20,40,0.06);
+            margin-bottom: 1.5rem;
+        }
+        .filter-title {
+            color: #0b1f30;
+            font-weight: 700;
+            margin-bottom: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+        .period-form {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: end;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .period-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+        .period-field label {
+            color: #4a657e;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .period-field input {
+            min-height: 40px;
+            border: 1px solid #d7e2ec;
+            border-radius: 10px;
+            padding: 0.45rem 0.7rem;
+            color: #2f4b66;
+            font: inherit;
+            background: #f7fafc;
+        }
+        .period-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .period-btn {
+            min-height: 40px;
+            border: 1px solid #1e5a8a;
+            background: #1e5a8a;
+            color: white;
+            border-radius: 10px;
+            padding: 0.45rem 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .period-btn.secondary {
+            background: #fff;
+            color: #1e5a8a;
+            border-color: #d7e2ec;
+        }
+        .period-caption {
+            color: #4a657e;
+            font-size: 0.9rem;
+            margin-bottom: 0.9rem;
+        }
+        .filter-btn {
+            border: 1px solid #d7e2ec;
+            background: #f7fafc;
+            color: #2f4b66;
+            border-radius: 999px;
+            padding: 0.55rem 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #1e5a8a;
+            border-color: #1e5a8a;
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: #999;
+        }
+        .empty-state i { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.5; }
+        
+        @media (max-width: 768px) {
+            .header { flex-direction: column; align-items: flex-start; }
+            th, td { padding: 0.8rem 0.5rem; font-size: 0.85rem; }
+            .card { padding: 1rem; }
+            .card .number { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Шапка -->
+    <div class="header">
+        <div>
+            <h1><i class="fas fa-user-tie"></i> Расчёт найма по увольнениям</h1>
+            <p style="color: #4a657e; margin-top: 0.3rem;">
+                <i class="far fa-calendar"></i> 
+                Период: {{ start_date|date:"d.m.Y" }} - {{ end_date|date:"d.m.Y" }}
+            </p>
+        </div>
+        <a href="{% url 'leave_page' %}" class="btn-home">
+            <i class="fas fa-arrow-left"></i> Назад
+        </a>
+    </div>
+
+    <!-- Сводка по типам увольнений -->
+    <div class="summary">
+        <div class="card highlight">
+            <h3><i class="fas fa-chart-bar"></i> Всего найма требуется</h3>
+            <div class="number">{{ total_hires }}</div>
+        </div>
+        
+        {% for type_code, need in hiring_needs.items %}
+        <div class="card">
+            <h3>
+                {% if type_code == 'resignation' %}<i class="fas fa-sign-out-alt"></i> Собственное желание
+                {% elif type_code == 'maternity' %}<i class="fas fa-baby"></i> Декреты
+                {% elif type_code == 'retirement' %}<i class="fas fa-birthday-cake"></i> Пенсия
+                {% elif type_code == 'dismissal_violation' %}<i class="fas fa-exclamation-triangle"></i> Нарушения
+                {% elif type_code == 'dismissal_cert' %}<i class="fas fa-clipboard-list"></i> Аттестация
+                {% elif type_code == 'other' %}<i class="fas fa-file-circle-plus"></i> Другое
+                {% endif %}
+            </h3>
+            <div class="number">{{ need.count }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="filter-panel">
+        <div class="filter-title">
+            <i class="far fa-calendar"></i> Период расчёта
+        </div>
+        <div class="period-caption">
+            Выберите даты, чтобы пересчитать статистику и список записей только за нужный период.
+        </div>
+        <form class="period-form" method="get">
+            <div class="period-field">
+                <label for="start">С</label>
+                <input id="start" name="start" type="date" value="{{ start_date|date:'Y-m-d' }}">
+            </div>
+            <div class="period-field">
+                <label for="end">По</label>
+                <input id="end" name="end" type="date" value="{{ end_date|date:'Y-m-d' }}">
+            </div>
+            <div class="period-actions">
+                <button class="period-btn" type="submit">Применить</button>
+                <a class="period-btn secondary" href="{% url 'ownReq' %}">Сбросить</a>
+            </div>
+        </form>
+
+        <div class="filter-title">
+            <i class="fas fa-filter"></i> Поиск по категории
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" type="button" data-filter="all">Все</button>
+            <button class="filter-btn" type="button" data-filter="resignation">Собственное желание</button>
+            <button class="filter-btn" type="button" data-filter="maternity">Декрет</button>
+            <button class="filter-btn" type="button" data-filter="retirement">Пенсия</button>
+            <button class="filter-btn" type="button" data-filter="dismissal_violation">Нарушения</button>
+            <button class="filter-btn" type="button" data-filter="dismissal_cert">Аттестация</button>
+            <button class="filter-btn" type="button" data-filter="other">Другое</button>
+        </div>
+    </div>
+
+    <!-- Таблица увольнений -->
+    <div class="table-wrapper">
+        <div class="table-header">
+            <h2>
+                <i class="fas fa-list"></i> Список увольнений и отпусков
+            </h2>
+        </div>
+        
+        {% if departures %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Сотрудник</th>
+                    <th>Должность</th>
+                    <th>Возраст</th>
+                    <th>Тип</th>
+                    <th>Дата</th>
+                    <th>Примечание</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for departure in departures %}
+                <tr data-type="{{ departure.type }}">
+                    <td>
+                        <strong>
+                            {% if departure.employee %}
+                                {{ departure.employee.first_name }} {{ departure.employee.last_name }}
+                            {% else %}
+                                <em>Не указано</em>
+                            {% endif %}
+                        </strong>
+                    </td>
+                    <td>
+                        {% if departure.employee.position %}
+                            {{ departure.employee.position }}
+                        {% else %}
+                            <em>—</em>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if departure.employee.age %}
+                            {{ departure.employee.age }} лет
+                        {% else %}
+                            <em>—</em>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="type-badge {{ departure.type }}">
+                            {% if departure.type == 'resignation' %}Собственное желание
+                            {% elif departure.type == 'maternity' %}Декрет
+                            {% elif departure.type == 'retirement' %}Пенсия
+                            {% elif departure.type == 'dismissal_violation' %}Нарушение
+                            {% elif departure.type == 'dismissal_cert' %}Аттестация
+                            {% elif departure.type == 'other' %}Другое
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        <strong>{{ departure.date|date:"d.m.Y" }}</strong>
+                        {% if departure.date < today %}
+                            <span style="color: #999; font-size: 0.85rem;"> ✓ прошло</span>
+                        {% elif departure.date|date:"Y-m-d" == today|date:"Y-m-d" %}
+                            <span style="color: #d9534f; font-weight: 600;"> ◉ сегодня</span>
+                        {% else %}
+                            <span style="color: #5cb85c; font-size: 0.85rem;"> ⏱ в будущем</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if departure.note %}
+                            {{ departure.note|truncatewords:10 }}
+                        {% else %}
+                            <em style="color: #999;">—</em>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <div><i class="fas fa-inbox"></i></div>
+            <p>Нет данных об увольнениях за указанный период</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+<script>
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const rows = document.querySelectorAll('tbody tr[data-type]');
+
+    filterButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const selectedType = button.dataset.filter;
+
+            filterButtons.forEach((item) => item.classList.remove('active'));
+            button.classList.add('active');
+
+            rows.forEach((row) => {
+                const shouldShow = selectedType === 'all' || row.dataset.type === selectedType;
+                row.style.display = shouldShow ? '' : 'none';
+            });
+        });
+    });
+</script>
+</body>
+</html>

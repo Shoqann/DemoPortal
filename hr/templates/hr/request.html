@@ -1,0 +1,88 @@
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Регистрация увольнения</h2>
+    
+    <!-- Вывод сообщений -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Новое увольнение</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="id_employee" class="form-label">Сотрудник</label>
+                            {{ form.employee }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_reason" class="form-label">Причина увольнения</label>
+                            {{ form.reason }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_dismissal_date" class="form-label">Дата увольнения</label>
+                            {{ form.dismissal_date }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_notes" class="form-label">Примечания</label>
+                            {{ form.notes }}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Зарегистрировать увольнение</button>
+                        <a href="{% url 'user_index' %}" class="btn btn-secondary">Отмена</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Последние увольнения</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Сотрудник</th>
+                                    <th>Причина</th>
+                                    <th>Дата</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for dismissal in dismissals|slice:":10" %}
+                                <tr>
+                                    <td>{{ dismissal.employee.full_name }}</td>
+                                    <td>{{ dismissal.get_reason_display }}</td>
+                                    <td>{{ dismissal.dismissal_date }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center">Нет зарегистрированных увольнений</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

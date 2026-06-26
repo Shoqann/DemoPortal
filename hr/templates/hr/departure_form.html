@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ meta.title }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f3f6f9;
+            color: #162638;
+            padding: 32px 18px;
+        }
+        .page { max-width: 1080px; margin: 0 auto; }
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 0;
+            background: #174b76;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn.secondary { background: #5d6f82; }
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+            gap: 18px;
+        }
+        .panel {
+            background: #fff;
+            border: 1px solid #dde6ef;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 6px 20px rgba(20, 45, 70, 0.06);
+        }
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .title i { color: #174b76; font-size: 28px; }
+        h1 { font-size: 28px; line-height: 1.2; }
+        .subtitle { color: #5d6f82; margin-bottom: 24px; }
+        .field { margin-bottom: 16px; }
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 7px;
+            color: #273f57;
+        }
+        select, input, textarea {
+            width: 100%;
+            border: 1px solid #cbd7e3;
+            border-radius: 8px;
+            padding: 11px 12px;
+            font: inherit;
+            background: #fff;
+            color: #162638;
+        }
+        textarea { resize: vertical; min-height: 100px; }
+        .errors {
+            margin-top: 6px;
+            color: #b42318;
+            font-size: 14px;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .recent-title {
+            font-size: 18px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .recent-list { display: grid; gap: 10px; }
+        .recent-item {
+            border: 1px solid #e4ebf2;
+            border-radius: 8px;
+            padding: 12px;
+            background: #fafcff;
+        }
+        .recent-item strong { display: block; margin-bottom: 4px; }
+        .muted { color: #6b7f93; font-size: 14px; }
+        .empty {
+            color: #6b7f93;
+            padding: 18px;
+            text-align: center;
+            border: 1px dashed #cbd7e3;
+            border-radius: 8px;
+        }
+        @media (max-width: 820px) {
+            body { padding: 18px 12px; }
+            .layout { grid-template-columns: 1fr; }
+            h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="topbar">
+        <a href="{% url 'leave_page' %}" class="btn secondary">
+            <i class="fas fa-arrow-left"></i> В разделы
+        </a>
+        <a href="{% url 'ownReq' %}" class="btn secondary">
+            <i class="fas fa-chart-column"></i> Расчёт найма
+        </a>
+    </div>
+
+    <div class="layout">
+        <main class="panel">
+            <div class="title">
+                <i class="fas {{ meta.icon }}"></i>
+                <h1>{{ meta.title }}</h1>
+            </div>
+            <p class="subtitle">{{ meta.description }}</p>
+
+            <form method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="errors">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="field">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="errors">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="actions">
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i> Сохранить в БД
+                    </button>
+                    <a href="{% url 'leave_page' %}" class="btn secondary">Отмена</a>
+                </div>
+            </form>
+        </main>
+
+        <aside class="panel">
+            <h2 class="recent-title">
+                <i class="fas fa-clock-rotate-left"></i> Последние записи
+            </h2>
+            <div class="recent-list">
+                {% for event in recent_events %}
+                    <div class="recent-item">
+                        <strong>
+                            {% if event.employee %}
+                                {{ event.employee.first_name }} {{ event.employee.last_name }}
+                            {% else %}
+                                Сотрудник не указан
+                            {% endif %}
+                        </strong>
+                        <div class="muted">{{ event.date|date:"d.m.Y" }}</div>
+                        {% if event.note %}
+                            <div class="muted">{{ event.note|truncatewords:14 }}</div>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <div class="empty">Пока нет сохранённых записей по этой категории.</div>
+                {% endfor %}
+            </div>
+        </aside>
+    </div>
+</div>
+</body>
+</html>

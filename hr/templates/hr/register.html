@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация сотрудника · HR-система</title>
+    <!-- Google Font & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b1a2b;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            background-image: radial-gradient(ellipse at 20% 50%, #143456 0%, #0a1522 100%);
+        }
+
+        .register-card {
+            max-width: 520px;
+            width: 100%;
+            background: rgba(18, 40, 68, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 3rem 2.8rem 2.8rem;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(74, 144, 226, 0.08);
+            border: 1px solid rgba(100, 180, 255, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+        }
+
+        .register-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(74, 144, 226, 0.15);
+        }
+
+        /* Иконка */
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: rgba(30, 80, 140, 0.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.6rem;
+            color: #7bb3e6;
+            box-shadow: 0 8px 32px rgba(30, 120, 220, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            transition: 0.3s ease;
+            border: 1px solid rgba(100, 180, 255, 0.10);
+        }
+
+        .register-card:hover .icon-wrapper {
+            background: rgba(40, 100, 180, 0.30);
+            box-shadow: 0 8px 40px rgba(30, 120, 220, 0.20);
+            border-color: rgba(100, 180, 255, 0.20);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e8f0f8;
+            letter-spacing: -0.02em;
+            text-align: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .sub-message {
+            font-size: 0.95rem;
+            color: #8fb0d0;
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .sub-message i {
+            color: #6daddb;
+            margin-right: 6px;
+        }
+
+        /* Стилизация формы */
+        .register-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #aac3dd;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group label i {
+            color: #4a7ba5;
+            font-size: 0.85rem;
+            width: 18px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.75rem 1rem;
+            border-radius: 16px;
+            border: 1px solid rgba(100, 180, 255, 0.10);
+            background: rgba(10, 25, 45, 0.60);
+            color: #e8f0f8;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+            outline: none;
+            backdrop-filter: blur(4px);
+            width: 100%;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: rgba(74, 144, 226, 0.40);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.10);
+            background: rgba(15, 35, 60, 0.80);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #4a6b8a;
+            font-weight: 400;
+        }
+
+        .form-group input:-webkit-autofill {
+            background-color: #0d2238 !important;
+            color: #e8f0f8 !important;
+            box-shadow: 0 0 0 30px #0d2238 inset !important;
+            -webkit-box-shadow: 0 0 0 30px #0d2238 inset !important;
+        }
+
+        .form-group input:-webkit-autofill::first-line {
+            color: #e8f0f8 !important;
+        }
+
+        .form-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238fb0d0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+
+        .form-group select option {
+            background: #0b1a2b;
+            color: #e8f0f8;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Ошибки формы */
+        .errorlist {
+            list-style: none;
+            background: rgba(200, 60, 60, 0.15);
+            border-left: 3px solid #d45a5a;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            margin-top: 0.2rem;
+            font-size: 0.85rem;
+            color: #f0baba;
+        }
+
+        .errorlist li {
+            margin: 0;
+        }
+
+        /* Кнопка сохранения */
+        .btn-save {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #1d4f7a, #0f3150);
+            color: #e8f0f8;
+            padding: 0.85rem 2.4rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 1px solid rgba(100, 180, 255, 0.12);
+            box-shadow: 0 8px 24px rgba(0, 30, 70, 0.4);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.4rem;
+        }
+
+        .btn-save:hover {
+            background: linear-gradient(135deg, #236bb0, #134572);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 36px rgba(0, 50, 120, 0.5);
+            border-color: rgba(100, 180, 255, 0.25);
+        }
+
+        .btn-save i {
+            color: #8ac0f0;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .btn-save:hover i {
+            color: #b0d8ff;
+        }
+
+        /* Ссылка входа */
+        .login-link {
+            text-align: center;
+            margin-top: 1.8rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(100, 180, 255, 0.06);
+            font-size: 0.95rem;
+            color: #8fb0d0;
+        }
+
+        .login-link a {
+            color: #7bb3e6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .login-link a:hover {
+            color: #b0d8ff;
+            text-decoration: underline;
+        }
+
+        .login-link i {
+            color: #4a7ba5;
+            font-size: 0.85rem;
+        }
+
+        /* Адаптив */
+        @media (max-width: 550px) {
+            .register-card {
+                padding: 2rem 1.5rem;
+                border-radius: 32px;
+            }
+            .icon-wrapper {
+                width: 64px;
+                height: 64px;
+                font-size: 2rem;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+            .btn-save {
+                padding: 0.7rem 1.8rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="register-card">
+    <!-- Иконка регистрации -->
+    <div class="icon-wrapper">
+        <i class="fas fa-user-plus"></i>
+    </div>
+
+    <h1>Добавить сотрудника</h1>
+    <p class="sub-message">
+        <i class="fas fa-id-card"></i>
+        Заполните все поля для регистрации
+    </p>
+
+    <!-- Форма -->
+    <form method="post" class="register-form">
+        {% csrf_token %}
+
+        <!-- Ручной рендеринг формы с красивыми label -->
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">
+                    <i class="fas fa-{% if field.name == 'first_name' %}user{% elif field.name == 'last_name' %}user{% elif field.name == 'username' %}user-circle{% elif field.name == 'email' %}envelope{% elif field.name == 'password' %}lock{% elif field.name == 'position' %}briefcase{% elif field.name == 'age' %}calendar{% elif field.name == 'department' %}building{% else %}circle{% endif %}"></i>
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                            <li><i class="fas fa-exclamation-circle"></i> {{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if field.help_text %}
+                    <small style="color: #6e91b5; font-size: 0.8rem; margin-top: 0.2rem;">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <!-- Общие ошибки формы -->
+        {% if form.non_field_errors %}
+            <ul class="errorlist">
+                {% for error in form.non_field_errors %}
+                    <li><i class="fas fa-exclamation-circle"></i> {{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <button type="submit" class="btn-save">
+            <i class="fas fa-save"></i> Сохранить
+        </button>
+    </form>
+
+    <!-- Ссылка на вход -->
+    <div class="login-link">
+        <i class="fas fa-sign-in-alt"></i>
+        <a href="{% url 'login' %}">Войти в систему</a>
+    </div>
+</div>
+
+</body>
+</html>

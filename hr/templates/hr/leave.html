@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Типы увольнений</title>
+    <!-- Google Font & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b1a2b;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: radial-gradient(ellipse at 20% 50%, #143456 0%, #0a1522 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Кнопка "На главную" */
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #1d4f7a, #0f3150);
+            color: #e8f0f8;
+            padding: 0.6rem 1.6rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(0, 30, 70, 0.4);
+            transition: all 0.25s ease;
+            border: 1px solid rgba(100, 180, 255, 0.12);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .btn-home:hover {
+            background: linear-gradient(135deg, #236bb0, #134572);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 36px rgba(0, 50, 120, 0.5);
+            border-color: rgba(100, 180, 255, 0.25);
+        }
+
+        .btn-home i {
+            color: #8ac0f0;
+        }
+        .leaving {
+            color: #e8f0f8;
+            text-decoration: none;
+        }
+
+        /* Заголовок */
+        .header {
+            margin-bottom: 2.8rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-left h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #e8f0f8;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .header-left h1 i {
+            color: #7bb3e6;
+            font-size: 2.2rem;
+        }
+
+        .header-left .sub {
+            font-size: 1rem;
+            color: #8fb0d0;
+            margin-top: 0.2rem;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-left .sub i {
+            color: #4a7ba5;
+        }
+
+        .header-badge {
+            background: rgba(30, 80, 140, 0.25);
+            color: #e8f0f8;
+            padding: 0.6rem 1.6rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 8px 18px rgba(0, 20, 40, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            border: 1px solid rgba(100, 180, 255, 0.08);
+        }
+
+        .header-badge i {
+            color: #7bb3e6;
+        }
+
+        /* Сетка карточек */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Карточка-раздел */
+        .card {
+            background: rgba(18, 40, 68, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 1.8rem 1.6rem 1.8rem 1.6rem;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(74, 144, 226, 0.06);
+            border: 1px solid rgba(100, 180, 255, 0.06);
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 240px;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(74, 144, 226, 0.15);
+            border-color: rgba(100, 180, 255, 0.15);
+            background: rgba(22, 50, 85, 0.80);
+        }
+
+        /* Иконка и заголовок карточки */
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid rgba(100, 180, 255, 0.06);
+            padding-bottom: 0.9rem;
+        }
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            background: rgba(30, 80, 140, 0.25);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            color: #7bb3e6;
+            flex-shrink: 0;
+            transition: 0.3s ease;
+            border: 1px solid rgba(100, 180, 255, 0.08);
+        }
+
+        .card:hover .card-icon {
+            background: rgba(40, 100, 180, 0.30);
+            border-color: rgba(100, 180, 255, 0.20);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #e8f0f8;
+            letter-spacing: -0.01em;
+        }
+
+        .card-title small {
+            font-weight: 400;
+            font-size: 0.75rem;
+            color: #8fb0d0;
+            display: block;
+            margin-top: 0.1rem;
+            letter-spacing: 0.2px;
+        }
+
+        /* Тело карточки */
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem 0 0.2rem 0;
+            min-height: 80px;
+            color: #8fb0d0;
+            font-size: 0.95rem;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .card-body .empty-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.7;
+        }
+
+        .card-body .empty-placeholder i {
+            font-size: 2.2rem;
+            color: #4a7ba5;
+            transition: 0.2s;
+        }
+
+        .card:hover .empty-placeholder i {
+            color: #7bb3e6;
+        }
+
+        .card-body .empty-placeholder span {
+            font-weight: 400;
+            font-size: 0.85rem;
+            background: rgba(100, 180, 255, 0.04);
+            padding: 0.2rem 1rem;
+            border-radius: 60px;
+            color: #8fb0d0;
+        }
+
+        /* Специфические иконки для каждого раздела */
+        .card.dismiss .card-icon { background: rgba(166, 99, 75, 0.25); color: #d4a08a; }
+        .card.maternity .card-icon { background: rgba(61, 123, 158, 0.25); color: #7bb3d6; }
+        .card.pension .card-icon { background: rgba(178, 134, 76, 0.25); color: #d4b88a; }
+        .card.violation .card-icon { background: rgba(179, 83, 58, 0.25); color: #d48a7a; }
+        .card.attestation .card-icon { background: rgba(79, 111, 146, 0.25); color: #8aacd4; }
+
+        /* нижняя метка "раздел" */
+        .card-footer {
+            margin-top: 1.2rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #6e91b5;
+            border-top: 1px solid rgba(100, 180, 255, 0.06);
+            padding-top: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-footer i {
+            font-size: 0.7rem;
+            color: #4a7ba5;
+        }
+
+        .tag {
+            background: rgba(100, 180, 255, 0.06);
+            padding: 0.15rem 0.8rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #8fb0d0;
+        }
+
+        /* дополнительная информационная строка внизу */
+        .info-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding: 0.8rem 1.2rem;
+            background: rgba(18, 40, 68, 0.50);
+            backdrop-filter: blur(4px);
+            border-radius: 60px;
+            border: 1px solid rgba(100, 180, 255, 0.06);
+            font-size: 0.9rem;
+            color: #8fb0d0;
+        }
+
+        .info-row i {
+            color: #4a7ba5;
+            margin-right: 6px;
+        }
+
+        .info-row .hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-row .badge-light {
+            background: rgba(30, 80, 140, 0.20);
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            color: #8fb0d0;
+            border: 1px solid rgba(100, 180, 255, 0.06);
+        }
+
+        /* Ссылки-обёртки карточек */
+        .card-link {
+            text-decoration: none;
+            display: block;
+        }
+
+        @media (max-width: 550px) {
+            body { padding: 1rem 0.8rem; }
+            .header-left h1 { font-size: 1.8rem; }
+            .header-badge { font-size: 0.8rem; padding: 0.4rem 1.2rem; }
+            .card { padding: 1.4rem; min-height: 200px; }
+            .grid { gap: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Шапка -->
+    <div class="header">
+        <div class="header-left">
+            <h1>
+                <i class="fas fa-people-arrows"></i>
+                Типы увольнений
+            </h1>
+            <div class="sub">
+                <i class="fas fa-puzzle-piece"></i>
+                Разделы для заполнения · каждый содержит свою логику
+            </div>
+        </div>
+        <a href="{% url 'user_index' %}" class="btn-home">
+            <i class="fas fa-home"></i> На главную
+        </a>
+        
+        <div class="header-badge">
+            <i class="fas fa-layer-group"></i>
+            <a class="leaving" href="{% url 'ownReq' %}">Расчёт найма</a>
+        </div>
+        <a class="btn-home" href="{% url 'hr_logout' %}">Выход</a>
+    </div>
+
+    <!-- Сетка карточек -->
+    <div class="grid">
+
+        <!-- 1. Увольнение по собственному желанию -->
+        <a href="{% url 'resignationPage' %}" class="card-link">
+            <div class="card dismiss">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-sign-out-alt"></i></div>
+                    <div class="card-title">
+                        Собственное желание
+                        <small>добровольный уход</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="empty-placeholder">
+                        <i class="fas fa-door-open"></i>
+                        <span>Записей: {{ hiring_needs.resignation.count|default:0 }}</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span><i class="far fa-file-alt"></i> раздел 1</span>
+                    <span class="tag">нужно {{ hiring_needs.resignation.hires_needed|default:0 }}</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- 2. Декреты -->
+        <a href="{% url 'decreePage' %}" class="card-link">
+            <div class="card maternity">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-baby"></i></div>
+                    <div class="card-title">
+                        Декреты
+                        <small>отпуск по уходу</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="empty-placeholder">
+                        <i class="fas fa-baby-carriage"></i>
+                        <span>Записей: {{ hiring_needs.maternity.count|default:0 }}</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span><i class="far fa-file-alt"></i> раздел 2</span>
+                    <span class="tag">нужно {{ hiring_needs.maternity.hires_needed|default:0 }}</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- 3. Пенсия (по дням рождения) -->
+        <a href="{% url 'pensionPage' %}" class="card-link">
+            <div class="card pension">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-cake-candles"></i></div>
+                    <div class="card-title">
+                        Пенсия
+                        <small>по дням рождения</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="empty-placeholder">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Записей: {{ hiring_needs.retirement.count|default:0 }}</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span><i class="far fa-file-alt"></i> раздел 3</span>
+                    <span class="tag">нужно {{ hiring_needs.retirement.hires_needed|default:0 }}</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- 4. Нарушения (предупреждения итд) -->
+        <a href="{% url 'warningsPage' %}" class="card-link">
+            <div class="card violation">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="card-title">
+                        Нарушения
+                        <small>предупреждения / дисциплина</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="empty-placeholder">
+                        <i class="fas fa-gavel"></i>
+                        <span>Записей: {{ hiring_needs.dismissal_violation.count|default:0 }}</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span><i class="far fa-file-alt"></i> раздел 4</span>
+                    <span class="tag">нужно {{ hiring_needs.dismissal_violation.hires_needed|default:0 }}</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- 5. Аттестация (тест -> понижение / увольнение) -->
+        <a href="{% url 'certificationPage' %}" class="card-link">
+            <div class="card attestation">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-clipboard-list"></i></div>
+                    <div class="card-title">
+                        Аттестация
+                        <small>не сдал тест → понижение/уход</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="empty-placeholder">
+                        <i class="fas fa-file-signature"></i>
+                        <span>Записей: {{ hiring_needs.dismissal_cert.count|default:0 }}</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span><i class="far fa-file-alt"></i> раздел 5</span>
+                    <span class="tag">нужно {{ hiring_needs.dismissal_cert.hires_needed|default:0 }}</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- 6. Другое -->
+        <a href="{% url 'otherDeparturePage' %}" class="card-link">
+            <div class="card attestation">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-file-circle-plus"></i></div>
+                    <div class="card-title">
+                        Другое
+                        <small>оставшиеся причины</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="empty-placeholder">
+                        <i class="fas fa-folder-plus"></i>
+                        <span>Записей: {{ hiring_needs.other.count|default:0 }}</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span><i class="far fa-file-alt"></i> раздел 6</span>
+                    <span class="tag">нужно {{ hiring_needs.other.hires_needed|default:0 }}</span>
+                </div>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- Нижняя информационная строка -->
+    <div class="info-row">
+        <div class="hint">
+            <i class="fas fa-arrow-right"></i>
+            <span>Всего записей: {{ total_departures|default:0 }} · принять: {{ total_hires|default:0 }} · активных сотрудников: {{ active_employees|default:0 }}</span>
+        </div>
+        
+        <div class="hint">
+            <i class="fas fa-user-cog"></i>
+            <span style="opacity: 0.7;">сохраняется в БД</span>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
