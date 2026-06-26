@@ -9,6 +9,11 @@ DemoPortal - это корпоративный HR-портал на основе
 
 Главная цель проекта - продемонстрировать, как небольшая организация может автоматизировать основные HR-процессы и предоставить сотрудникам быстрый доступ к полезной информации через веб-интерфейс. 
 
+## Тестовый аккаунт для просмотра
+Логин: test.test3
+Пароль: test
+
+
 #      Как начать
 
 1. Скопируйте git clone, создайте виртуальную среду, внедрите нужные требования 
@@ -71,6 +76,11 @@ python manage.py test
 DemoPortal is a Django-based corporate HR portal designed to help manage employee-related workflows in one place. The project includes employee registration, authentication, departure tracking, hiring need calculation, and a simple AI assistant for answering internal questions.
 
 The main goal of the project is to demonstrate how a small organization can automate basic HR processes and provide employees with quick access to useful information through a web interface.
+
+## Test account for testing
+Login: test.test3
+Password: test
+
 
 #      How to start
 
