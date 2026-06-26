@@ -45,8 +45,8 @@ python manage.py test
 
 #                   Useful URLs
 
-# /admin/                     Django admin
-# /hr/index/                  Main portal
-# /hr/register/               Employee registration
-# /hr/leave/                  Departure management
-# /hr/api/hiring-need/        Hiring need API
+/admin/                     Django admin
+/hr/index/                  Main portal
+/hr/register/               Employee registration
+/hr/leave/                  Departure management
+/hr/api/hiring-need/        Hiring need API
