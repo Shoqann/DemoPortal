@@ -63,7 +63,7 @@ python manage.py test
 
 # ---------
 #      Demo Portal with Staff planning
-#      [Click on me to view web page](https://shoqan.pythonanywhere.com/hr/leave/)
+#      [Click on me to view the web page](https://shoqan.pythonanywhere.com/hr/leave/)
 # ---------
 
 ## Project Description
