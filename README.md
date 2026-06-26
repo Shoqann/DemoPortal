@@ -1,6 +1,6 @@
 # ---------
 #      Демо Портал с Увольнениями
-#      [Нажми на меня для просмотра сайте](https://shoqan.pythonanywhere.com/hr/leave/)
+#      [Нажми на меня для просмотра сайта](https://shoqan.pythonanywhere.com/hr/leave/)
 # ---------
 
 
